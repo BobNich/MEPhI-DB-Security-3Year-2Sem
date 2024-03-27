@@ -10,7 +10,6 @@ CREATE TABLE "PianoModel" (
     UNIQUE ("model")
 );
 
-
 CREATE TABLE "Specialist" (
     "id" SERIAL PRIMARY KEY,
     "name" VARCHAR,
