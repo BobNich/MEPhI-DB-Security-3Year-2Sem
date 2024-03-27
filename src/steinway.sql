@@ -1,6 +1,5 @@
 CREATE TABLE "PianoType" (
-    "type" VARCHAR PRIMARY KEY,
-    UNIQUE ("type")
+    "type" VARCHAR PRIMARY KEY
 );
 
 CREATE TABLE "PianoModel" (
@@ -16,12 +15,14 @@ CREATE TABLE "Specialist" (
     "availability" BOOLEAN
 );
 
+CREATE TYPE order_status AS ENUM ('pending', 'in_progress', 'completed');
+
 CREATE TABLE "ProductionOrder" (
     "id" SERIAL PRIMARY KEY,
     "piano_model_id" VARCHAR REFERENCES "PianoModel" ("model"),
     "specialist_id" INTEGER REFERENCES "Specialist" ("id"),
     "prod_order_date" DATE,
-    "status" VARCHAR
+    "status" order_status
 );
 
 CREATE TABLE "Option" (
@@ -33,6 +34,6 @@ CREATE TABLE "Option" (
 
 CREATE TABLE "CustomerOrderOption" (
     "id" SERIAL PRIMARY KEY,
-    "option_product_id" INTEGER REFERENCES "Option" ("id"),
+    "option_id" INTEGER REFERENCES "Option" ("id"),
     "production_order_id" INTEGER REFERENCES "ProductionOrder" ("id")
 );
