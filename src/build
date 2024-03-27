@@ -1,2 +1,0 @@
-cat steinway.sql | sqlite3 steinway.db  
-sqlite3 steinway.db
