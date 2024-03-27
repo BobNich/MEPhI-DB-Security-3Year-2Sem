@@ -1,53 +1,39 @@
-CREATE TABLE Piano (
-  id INTEGER PRIMARY KEY AUTOINCREMENT,
-  model_name TEXT,
-  specifications TEXT,
-  price DECIMAL
+CREATE TABLE "PianoType" (
+    "type" VARCHAR PRIMARY KEY,
+    UNIQUE ("type")
 );
 
-CREATE TABLE Option (
-  id INTEGER PRIMARY KEY AUTOINCREMENT,
-  piano_id INTEGER,
-  option_name TEXT,
-  FOREIGN KEY (piano_id) REFERENCES Piano (id)
+CREATE TABLE "PianoModel" (
+    "model" VARCHAR PRIMARY KEY,
+    "type" VARCHAR REFERENCES "PianoType" ("type"),
+    "price" DECIMAL,
+    UNIQUE ("model")
 );
 
-CREATE TABLE CustomerOrderOption (
-  id INTEGER PRIMARY KEY AUTOINCREMENT,
-  customer_order_id INTEGER,
-  option_id INTEGER,
-  FOREIGN KEY (customer_order_id) REFERENCES CustomerOrderItem (id),
-  FOREIGN KEY (option_id) REFERENCES Option (id)
+
+CREATE TABLE "Specialist" (
+    "id" SERIAL PRIMARY KEY,
+    "name" VARCHAR,
+    "availability" BOOLEAN
 );
 
-CREATE TABLE CustomerOrderItem (
-  id INTEGER PRIMARY KEY AUTOINCREMENT,
-  piano_id INTEGER,
-  FOREIGN KEY (piano_id) REFERENCES Piano (id)
+CREATE TABLE "ProductionOrder" (
+    "id" SERIAL PRIMARY KEY,
+    "piano_model_id" VARCHAR REFERENCES "PianoModel" ("model"),
+    "specialist_id" INTEGER REFERENCES "Specialist" ("id"),
+    "prod_order_date" DATE,
+    "status" VARCHAR
 );
 
-CREATE TABLE Specialist (
-  id INTEGER PRIMARY KEY AUTOINCREMENT,
-  name TEXT,
-  model_name TEXT,
-  availability INTEGER,
-  FOREIGN KEY (model_name) REFERENCES Piano (model_name)
+CREATE TABLE "Option" (
+    "id" SERIAL PRIMARY KEY,
+    "piano_model_id" VARCHAR REFERENCES "PianoModel" ("model"),
+    "option_name" VARCHAR,
+    "price" DECIMAL
 );
 
-CREATE TABLE ProductionOrder (
-  id INTEGER PRIMARY KEY AUTOINCREMENT,
-  customer_item_order_id INTEGER,
-  piano_id INTEGER,
-  specialist_id INTEGER,
-  prod_order_date DATE,
-  status TEXT,
-  FOREIGN KEY (customer_item_order_id) REFERENCES CustomerOrderItem (id),
-  FOREIGN KEY (piano_id) REFERENCES Piano (id),
-  FOREIGN KEY (specialist_id) REFERENCES Specialist (id)
-);
-
-CREATE TABLE Inventory (
-  id INTEGER PRIMARY KEY AUTOINCREMENT,
-  piano_id INTEGER,
-  FOREIGN KEY (piano_id) REFERENCES Piano (id)
+CREATE TABLE "CustomerOrderOption" (
+    "id" SERIAL PRIMARY KEY,
+    "option_product_id" INTEGER REFERENCES "Option" ("id"),
+    "production_order_id" INTEGER REFERENCES "ProductionOrder" ("id")
 );
